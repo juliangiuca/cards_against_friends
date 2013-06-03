@@ -1,5 +1,7 @@
 class FriendsController < ApplicationController
+  before_filter :fetch_auth_from_facebook
   before_filter :get_graph
+
 
   def index
     @app  =  @graph.get_object(ENV["FACEBOOK_APP_ID"])

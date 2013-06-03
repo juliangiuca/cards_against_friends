@@ -56,10 +56,11 @@ CardsAgainstFriends::Application.routes.draw do
   # Note: This route will make all actions in every controller accessible via GET requests.
   # match ':controller(/:action(/:id))(.:format)'
   resources :friends
-  match '/auth/facebook' => "auth#facebook"
-  match '/auth/facebook/callback' => "auth#facebook_callback"
-  post '/' => "friends#index"
+  #match '/auth/facebook' => "auth#facebook"
+  #match '/auth/facebook/callback' => "auth#facebook_callback"
+  #post '/' => "friends#index"
 
+  get '/auth/:provider/callback', to: 'sessions#create'
   root :to => 'friends#index'
   
 end

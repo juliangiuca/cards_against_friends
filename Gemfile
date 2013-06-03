@@ -7,6 +7,8 @@ gem 'rails', '3.2.11'
 
 gem 'mysql2'
 gem 'koala'
+gem 'omniauth'
+gem 'omniauth-facebook'
 
 
 # Gems used only for assets and not required
