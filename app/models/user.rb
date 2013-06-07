@@ -17,5 +17,6 @@ class User < ActiveRecord::Base
     user.access_token = auth_hash["credentials"]["token"]
 
     user.save if user.changed?
+    user
   end
 end

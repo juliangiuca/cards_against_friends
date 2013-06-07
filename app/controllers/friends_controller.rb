@@ -15,13 +15,6 @@ class FriendsController < ApplicationController
       # for other data you can always run fql
       @friends_using_app = @graph.fql_query("SELECT uid, name, is_app_user, pic_square FROM user WHERE uid in (SELECT uid2 FROM friend WHERE uid1 = me()) AND is_app_user = 1")
     end
-    debugger
-    i=0
-    i+=1
-
-  rescue Koala::Facebook::APIError => e
-    session[:access_token] = nil
-    redirect_to "/auth/facebook"
   end
 
   private
