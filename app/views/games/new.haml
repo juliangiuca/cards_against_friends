@@ -1,0 +1,10 @@
+%h1 New game
+
+Select the friends you want to play Cards with!
+= form_for @game do |f|
+  - current_user.friends.each do |friend|
+    = check_box_tag "friend[uid]", friend.uid
+    = friend.name
+-#= render 'form'
+
+= link_to 'Back', games_path

@@ -76,7 +76,7 @@ CardsAgainstFriends::Application.routes.draw do
     resources :questions
   end
 
-
+  resource :games
 
   mount Resque::Server, :at => "/resque"
 

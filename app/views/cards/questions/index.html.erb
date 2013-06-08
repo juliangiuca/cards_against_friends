@@ -1,0 +1,21 @@
+<h1>Listing cards_questions</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @cards_questions.each do |cards_question| %>
+  <tr>
+    <td><%= link_to 'Show', cards_question %></td>
+    <td><%= link_to 'Edit', edit_cards_question_path(cards_question) %></td>
+    <td><%= link_to 'Destroy', cards_question, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Question', new_cards_question_path %>
