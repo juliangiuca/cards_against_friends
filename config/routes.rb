@@ -70,5 +70,14 @@ CardsAgainstFriends::Application.routes.draw do
 
   #get '/auth/:provider/callback', to: 'sessions#create'
   root :to => 'friends#index'
-  
+
+  namespace :cards do
+    resources :answers
+    resources :questions
+  end
+
+
+
+  mount Resque::Server, :at => "/resque"
+
 end

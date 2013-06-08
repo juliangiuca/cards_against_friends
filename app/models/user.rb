@@ -6,16 +6,16 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   devise :omniauthable, :omniauth_providers => [:facebook]
-  
 
-  # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :provider, :uid, :name
-  
+
+  has_many :friendships
+  has_many :friends, :through => :friendships
+
   def self.find_or_create_from_auth_hash(auth, signed_in_resource=nil)
     user = User.find_or_initialize_by_uid(auth["uid"])
 
-    debugger
-    user.uid        = auth.uid
+    user.uid        = auth.uid.to_i
     user.first_name = auth.info.first_name
     user.last_name  = auth.info.last_name
     user.email      = auth.info.email
@@ -52,5 +52,9 @@ class User < ActiveRecord::Base
                            )
     end
     user
+  end
+
+  def fetch_friends(graph)
+    Resque.enqueue(FriendsWorker, self.id, self.access_token)
   end
 end

@@ -1,0 +1,2 @@
+module Cards::QuestionsHelper
+end

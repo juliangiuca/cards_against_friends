@@ -1,0 +1,6 @@
+%ol
+  - current_user.friends.each do |friend|
+    %li
+      %img{:src => "https://graph.facebook.com/#{friend.uid}/picture?type=square"}
+      = friend.name
+  

@@ -6,11 +6,14 @@ gem 'rails', '3.2.11'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'mysql2'
+gem 'resque', :require => "resque/server"
+gem 'resque-history'
 gem 'koala'
 gem 'figaro'
 gem 'devise'
 gem 'omniauth'
 gem 'omniauth-facebook'
+gem 'haml'
 
 
 # Gems used only for assets and not required
