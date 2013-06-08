@@ -1,5 +1,5 @@
 class FriendsController < ApplicationController
-  before_filter :fetch_auth_from_facebook
+  before_filter :authenticate_user!
   before_filter :get_graph
 
 
@@ -19,7 +19,7 @@ class FriendsController < ApplicationController
 
   private
   def get_graph
-    @graph  = Koala::Facebook::API.new(access_token)
+    @graph  = Koala::Facebook::API.new(current_user.access_token)
   end
 
 end

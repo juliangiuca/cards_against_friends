@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
     session[:access_token]# || access_token_from_cookie
   end
 
-  def fetch_auth_from_facebook
-    session[:access_token] || (redirect_to "/auth/facebook" and return)
-  end
+  #def fetch_auth_from_facebook
+    #session[:access_token] || (redirect_to "/auth/facebook" and return)
+  #end
 end

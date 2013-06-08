@@ -1,22 +1,56 @@
 class User < ActiveRecord::Base
-  # attr_accessible :title, :body
-  def self.find_or_create_from_auth_hash(auth_hash)
-    user = User.find_or_initialize_by_uid(auth_hash["uid"])
+  # Include default devise modules. Others available are:
+  # :token_authenticatable, :confirmable,
+  # :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
 
-    user.uid        = auth_hash["uid"]
-    user.first_name = auth_hash["info"]["first_name"]
-    user.last_name  = auth_hash["info"]["last_name"]
-    user.email      = auth_hash["info"]["email"]
-    user.nickname   = auth_hash["info"]["nickname"]
-    user.urls       = auth_hash["info"]["urls"]
-    user.image      = auth_hash["info"]["image"]
-    user.location   = auth_hash["info"]["location"]
-    user.verified   = auth_hash["info"]["verified"]
+  devise :omniauthable, :omniauth_providers => [:facebook]
+  
 
-    user.gender     = auth_hash["extra"]["raw_info"]["gender"]
-    user.access_token = auth_hash["credentials"]["token"]
+  # Setup accessible (or protected) attributes for your model
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :provider, :uid, :name
+  
+  def self.find_or_create_from_auth_hash(auth, signed_in_resource=nil)
+    user = User.find_or_initialize_by_uid(auth["uid"])
+
+    debugger
+    user.uid        = auth.uid
+    user.first_name = auth.info.first_name
+    user.last_name  = auth.info.last_name
+    user.email      = auth.info.email
+    user.nickname   = auth.info.nickname
+    user.urls       = auth.info.urls
+    user.image      = auth.info.image
+    user.location   = auth.info.location
+    user.verified   = auth.info.verified
+
+    user.gender     = auth.extra.raw_info.gender
+    user.access_token = auth.credentials.token
+    user.password   = Devise.friendly_token[0,20]
 
     user.save if user.changed?
+    user
+  end
+
+  def self.new_with_session(params, session)
+    super.tap do |user|
+      if data = session["devise.facebook_data"] && session["devise.facebook_data"]["extra"]["raw_info"]
+        user.email = data["email"] if user.email.blank?
+      end
+    end
+  end
+
+  def self.find_for_facebook_oauth(auth, signed_in_resource=nil)
+    user = User.where(:provider => auth.provider, :uid => auth.uid).first
+    unless user
+      user = User.create(name:auth.extra.raw_info.name,
+                           provider:auth.provider,
+                           uid:auth.uid,
+                           email:auth.info.email,
+                           password:Devise.friendly_token[0,20]
+                           )
+    end
     user
   end
 end
